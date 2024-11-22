@@ -40,16 +40,18 @@
     <!-- Transform from map to odom -->
     <node pkg="sim_env" name="tf_map2odom_node" type="tf_map2odom.py" output="screen">
       <param name="~odom_frame_id" value="$(arg robot_namespace)/odom" />
+      <param name="~localization_topic" value="$(arg robot_namespace)/amcl_pose" />
     </node>
 
     <!-- AMCL -->
-    <!-- <include file="$(find sim_env)/launch/include/location/amcl.launch.xml">
+    <include file="$(find sim_env)/launch/include/location/amcl.launch.xml">
       <arg name="robot_namespace" value="$(arg robot_namespace)" />
       <arg name="start_ns" value="$(arg start_ns)" />
       <arg name="robot_x" value="$(arg robot_x)" />
       <arg name="robot_y" value="$(arg robot_y)" />
       <arg name="robot_z" value="$(arg robot_z)" />
-    </include> -->
+      <arg name="robot_yaw" value="$(arg robot_yaw)" />
+    </include>
 
     <!-- MoveBase -->
     <include file="$(find sim_env)/launch/include/navigation/move_base.launch.xml">
