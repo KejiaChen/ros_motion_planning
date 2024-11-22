@@ -51,10 +51,10 @@
   <node name="rviz" pkg="rviz" type="rviz" args="-d $(find sim_env)/rviz/$(arg rviz_file)" unless="$(eval arg('rviz_file') == '')" />
 
   <!-- Follower Goal Updater -->
-  <!-- <include file="$(find follower_goal_updater)/launch/follower_goal_updater.launch.xml">
+  <include file="$(find follower_goal_updater)/launch/follower_goal_updater.launch.xml">
     <arg name="leader" value="$(arg leader)" />
     <arg name="follower" value="$(arg follower)" />
     <arg name="offset" value="$(arg offset)" />
-  </include> -->
+  </include>
 
 </launch>
