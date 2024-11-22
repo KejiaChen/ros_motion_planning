@@ -40,6 +40,9 @@ class TFMap2Odom:
         odom.header.frame_id = "map"
         odom.child_frame_id = self.odom_frame_id
         
+        if self.latest_pose is None:
+            return
+        
         odom.pose.pose.position.x = self.latest_pose.position.x
         odom.pose.pose.position.y = self.latest_pose.position.y
         odom.pose.pose.position.z = 0.0
