@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format2.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="2">
+    <name>follower_goal_updater</name>
+    <version>1.17.3</version>
+    <description>
+
+        The follower_goal_updater will update the goal of the follower robot based on the position of the leader robot. The follower robot will follow the leader robot by updating its goal to the position of the leader robot.
+
+    </description>
+    <author>Kejia Chen</author>
+    <author>kejia.chen@tum.de</author>
+    <maintainer email="kejia.chen@tum.de">Kejia Chen</maintainer>
+    <license>BSD</license>
+
+    <buildtool_depend>catkin</buildtool_depend>
+
+    <build_depend>roscpp</build_depend>
+    <build_depend>geometry_msgs</build_depend>
+    <build_depend>tf2</build_depend>
+    <build_depend>tf2_geometry_msgs</build_depend>
+
+    <exec_depend>roscpp</exec_depend>
+    <exec_depend>geometry_msgs</exec_depend>
+    <exec_depend>tf2</exec_depend>
+    <exec_depend>tf2_geometry_msgs</exec_depend>
+
+</package>

@@ -24,6 +24,11 @@
   <arg name="headless" default="false" />
   <arg name="rviz_file" default="" />
 
+  <!-- select leader and follower -->
+  <arg name="leader" default="robot1" />
+  <arg name="follower" default="robot2" />
+  <arg name="offset" default="-1.0" />
+
   <!-- start Gazebo with a specific world -->
   <include file="$(find gazebo_ros)/launch/empty_world.launch" unless="$(eval arg('world') == '')">
     <arg name="world_name" value="$(find sim_env)/worlds/$(arg world).world" />
@@ -44,4 +49,12 @@
   <!-- open rviz for visualization -->
   <node pkg="dynamic_rviz_config" type="rviz_generate.py" name="rosapp_rviz" args="$(arg robot_number)" output="screen" if="$(eval arg('rviz_file') == '')" />
   <node name="rviz" pkg="rviz" type="rviz" args="-d $(find sim_env)/rviz/$(arg rviz_file)" unless="$(eval arg('rviz_file') == '')" />
+
+  <!-- Follower Goal Updater -->
+  <!-- <include file="$(find follower_goal_updater)/launch/follower_goal_updater.launch.xml">
+    <arg name="leader" value="$(arg leader)" />
+    <arg name="follower" value="$(arg follower)" />
+    <arg name="offset" value="$(arg offset)" />
+  </include> -->
+
 </launch>

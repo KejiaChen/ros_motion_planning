@@ -1,0 +1,23 @@
+<!-- 
+******************************************************************************************
+*  Copyright (c) 2024 Kejia Chen, All Rights Reserved                                  *
+*                                                                                        *
+*  @brief    follower_goal_updater module parameter configure.                                       *
+*  @author   Kejia Chen,                                                                 *
+*  @version  1.0.0                                                                       *
+*  @date     2024.11.22                                                                  *
+*  @license  GNU General Public License (GPL)                                            *
+******************************************************************************************
+-->
+
+<launch>
+  <arg name="leader" default="robot1" />
+  <arg name="follower" default="robot2" />
+  <arg name="offset" default="-1.0" />
+    <!-- move base module -->
+    <node pkg="follower_goal_updater" type="follower_goal_updater_node" respawn="false" name="follower_goal_updater" output="screen">
+        <param name="leader_pose_topic" value="$(arg leader)/amcl_pose" />
+        <param name="goal_pub_topic" value="$(arg follower)/move_base_simple/goal" />
+        <param name="offset" value="$(arg offset)" />
+    </node>
+</launch>
