@@ -1,0 +1,8 @@
+<library path="lib/libmpc_follow_controller">
+    <class name="mpc_follow_controller/MPCFollowController" type="rmp::controller::MPCFollowController"
+        base_class_type="nav_core::BaseLocalPlanner">
+        <description>
+            A implementation of a local model predicted control (MPC) controller.
+        </description>
+    </class>
+</library>
