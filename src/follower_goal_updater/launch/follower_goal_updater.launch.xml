@@ -17,7 +17,7 @@
     <!-- move base module -->
     <node pkg="follower_goal_updater" type="follower_goal_updater_node" respawn="false" name="follower_goal_updater" output="screen">
         <param name="leader_pose_topic" value="$(arg leader)/amcl_pose" />
-        <param name="goal_pub_topic" value="$(arg follower)/move_base_simple/goal" />
+        <param name="goal_pub_topic" value="$(arg follower)/move_base_follow_simple/goal" />
         <param name="offset" value="$(arg offset)" />
     </node>
 </launch>

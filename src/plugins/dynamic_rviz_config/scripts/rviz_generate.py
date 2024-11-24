@@ -62,8 +62,11 @@ else:
         d.addGroup("Robot" + str(i + 1), meta_robot)
         # append `initialpose` setting panel
         r.appendToolInit("/robot" + str(i + 1) + "/initialpose")
-        # ppend `move_base_simple/goal` setting panel
-        r.appendToolGoal("/robot" + str(i + 1) + "/move_base_simple/goal")
+        if i == 0:
+            # ppend `move_base_simple/goal` setting panel
+            r.appendToolGoal("/robot" + str(i + 1) + "/move_base_simple/goal")
+        else:
+            r.appendToolGoal("/robot" + str(i + 1) + "/move_base_follow_simple/goal", False)
 
 # 设置Rviz标准面板
 r.setStdPanels()

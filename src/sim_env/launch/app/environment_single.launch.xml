@@ -26,6 +26,9 @@
   <arg name="robot_z" />
   <arg name="robot_yaw" />
 
+  <!-- leader follower -->
+  <arg name="robot_role" default="leader" />
+
   <!-- multi -->
   <group ns="$(arg robot_namespace)" if="$(arg start_ns)">
     <param name="tf_prefix" value="$(arg robot_namespace)" />
@@ -54,7 +57,17 @@
     </include>
 
     <!-- MoveBase -->
-    <include file="$(find sim_env)/launch/include/navigation/move_base.launch.xml">
+    <include file="$(find sim_env)/launch/include/navigation/move_base.launch.xml" if="$(eval arg('robot_role') == 'leader')">
+      <arg name="agent_number" value="$(arg agent_number)" />
+      <arg name="agent_id" value="$(arg agent_id)" />
+      <arg name="robot_namespace" value="$(arg robot_namespace)" />
+      <arg name="start_ns" value="$(arg start_ns)" />
+      <arg name="robot" value="$(arg robot)" />
+      <arg name="global_planner" value="$(arg global_planner)" />
+      <arg name="local_planner" value="$(arg local_planner)" />
+    </include>
+
+    <include file="$(find sim_env)/launch/include/navigation/move_base_follow.launch.xml" if="$(eval arg('robot_role') == 'follower')">
       <arg name="agent_number" value="$(arg agent_number)" />
       <arg name="agent_id" value="$(arg agent_id)" />
       <arg name="robot_namespace" value="$(arg robot_namespace)" />
@@ -82,6 +95,7 @@
       <arg name="robot_x" value="$(arg robot_x)" />
       <arg name="robot_y" value="$(arg robot_y)" />
       <arg name="robot_z" value="$(arg robot_z)" />
+      <arg name="robot_yaw" value="$(arg robot_yaw)" />
     </include>
 
     <!-- MoveBase-->

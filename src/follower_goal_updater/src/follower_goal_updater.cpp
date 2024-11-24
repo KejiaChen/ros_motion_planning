@@ -2,7 +2,7 @@
 
 // Constructor
 FollowerGoalUpdater::FollowerGoalUpdater() {
-    ros::NodeHandle private_nh("~/goal_update"); // Private node handle for retrieving parameters
+    ros::NodeHandle private_nh("~"); // Private node handle for retrieving parameters
     private_nh.param("leader_pose_topic", leader_pose_topic_, leader_pose_topic_);
     private_nh.param("goal_pub_topic", goal_pub_topic_, goal_pub_topic_);
     private_nh.param("offset", offset_, offset_);

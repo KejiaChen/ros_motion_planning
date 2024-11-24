@@ -10,6 +10,7 @@ robots_config:
     robot1_y_pos: "0.0"
     robot1_z_pos: "0.0"
     robot1_yaw: "0.0"
+    robot1_role: "leader"
 
 # * global planner
 #   * graph_planner

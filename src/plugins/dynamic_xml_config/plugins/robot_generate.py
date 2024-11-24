@@ -81,6 +81,7 @@ class RobotGenerator(XMLGenerator):
             launch.append(getRobotArg("y_pos", i))
             launch.append(getRobotArg("z_pos", i))
             launch.append(getRobotArg("yaw", i))
+            launch.append(getRobotArg("role", i))
 
         # create starting node
         include = RobotGenerator.createElement("include", props={"file": "$(find sim_env)/launch/app/environment_single.launch.xml"})
@@ -101,6 +102,7 @@ class RobotGenerator(XMLGenerator):
         include.append(RobotGenerator.createElement("arg", props={"name": "robot_y", "value": "$(eval arg('robot' + str(arg('agent_id')) + '_y_pos'))"}))
         include.append(RobotGenerator.createElement("arg", props={"name": "robot_z", "value": "$(eval arg('robot' + str(arg('agent_id')) + '_z_pos'))"}))
         include.append(RobotGenerator.createElement("arg", props={"name": "robot_yaw", "value": "$(eval arg('robot' + str(arg('agent_id')) + '_yaw'))"}))
+        include.append(RobotGenerator.createElement("arg", props={"name": "robot_role", "value": "$(eval arg('robot' + str(arg('agent_id')) + '_role'))"}))
 
         # recursive start
         cycle = RobotGenerator.createElement("include", props={"file": "$(find sim_env)/launch/include/robots/start_robots.launch.xml", "if": "$(eval arg('agent_id') > 1)"})

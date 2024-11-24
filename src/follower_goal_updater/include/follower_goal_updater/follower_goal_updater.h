@@ -29,9 +29,9 @@ private:
     ros::Subscriber leader_pose_sub_;      ///< Subscriber for the leader's pose
     ros::Publisher goal_pub_;              ///< Publisher for the follower's goal
 
-    std::string leader_pose_topic_ = "/robot1/amcl_pose"; ///< Topic for the leader's pose
-    std::string goal_pub_topic_ = "/robot2/move_base_simple/goal"; ///< Topic for the follower's goal
-    double offset_ = -1.0;                 ///< Offset for the follower's position
+    std::string leader_pose_topic_; ///< Topic for the leader's pose
+    std::string goal_pub_topic_; ///< Topic for the follower's goal
+    double offset_;                 ///< Offset for the follower's position
 };
 
 #endif // FOLLOWER_GOAL_UPDATER_H
