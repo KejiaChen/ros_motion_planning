@@ -283,6 +283,30 @@ double Controller::getLookAheadDistance(double vt)
 }
 
 /**
+ * @brief Calculate the look-ahead distance with current speed dynamically
+ * @param vt the current speed
+ * @param kappa the curvature of the path
+ * @param current_distance the distance to the goal
+ * @param desired_distance the desired distance to the goal
+ * @return L the look-ahead distance
+ */
+double Controller::getLookAheadDistanceFollow(double vt, double current_distance, double desired_distance, double kappa)
+{
+  double lookahead_dist = fabs(vt) * lookahead_time_;
+
+  // Scale down for high curvature
+  double curvature_factor = 1.0 / (1.0 + kappa);  
+  lookahead_dist *= curvature_factor; 
+
+  // Scale up for large distance to leader
+  double distance_factor = std::max(1.0, current_distance/ desired_distance);
+  lookahead_dist *= distance_factor;
+  ROS_INFO("distance_factor: %f", distance_factor);
+  return rmp::common::math::clamp(lookahead_dist, min_lookahead_dist_, max_lookahead_dist_);
+}
+
+
+/**
  * @brief find the point on the path that is exactly the lookahead distance away from the robot
  * @param lookahead_dist    the lookahead distance
  * @param robot_pose_global the robot's pose  [global]

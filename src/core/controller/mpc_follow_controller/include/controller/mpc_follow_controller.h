@@ -100,7 +100,7 @@ private:
   int m_;                 // control time domain
   Eigen::Vector2d du_p_;  // previous control error
 
-  ros::Publisher target_pt_pub_, current_pose_pub_;
+  ros::Publisher target_pt_pub_, current_pose_pub_, follow_goal_pt_pub_;
 
   // goal parameters
   double goal_x_, goal_y_, goal_theta_;

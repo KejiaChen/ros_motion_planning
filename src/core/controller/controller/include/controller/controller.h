@@ -131,6 +131,16 @@ public:
   double getLookAheadDistance(double vt);
 
   /**
+   * @brief Calculate the look-ahead distance with current speed dynamically
+   * @param vt the current speed
+   * @param kappa the curvature of the path
+   * @param current_distance the distance to the goal
+   * @param desired_distance the desired distance to the goal
+   * @return L the look-ahead distance
+   */
+  double getLookAheadDistanceFollow(double vt, double current_distance=1, double desired_distance=1, double kappa=0);
+
+  /**
    * @brief find the point on the path that is exactly the lookahead distance away from the robot
    * @param lookahead_dist    the lookahead distance
    * @param robot_pose_global the robot's pose  [global]

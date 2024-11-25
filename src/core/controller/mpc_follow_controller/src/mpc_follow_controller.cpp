@@ -110,6 +110,7 @@ void MPCFollowController::initialize(std::string name, tf2_ros::Buffer* tf, cost
 
     target_pt_pub_ = nh.advertise<geometry_msgs::PointStamped>("/target_point", 10);
     current_pose_pub_ = nh.advertise<geometry_msgs::PoseStamped>("/current_pose", 10);
+    follow_goal_pt_pub_ = nh.advertise<geometry_msgs::PointStamped>("/follow_goal_point", 10);
 
     ROS_INFO("MPC Controller initialized!");
   }
@@ -195,10 +196,18 @@ bool MPCFollowController::computeVelocityCommands(geometry_msgs::Twist& cmd_vel)
   // transform global plan to robot frame
   std::vector<geometry_msgs::PoseStamped> prune_plan = prune(robot_pose_map);
 
+  geometry_msgs::PointStamped follow_goal_pt;
+  follow_goal_pt.point.x = goal_x_;
+  follow_goal_pt.point.y = goal_y_;
+  follow_goal_pt.header.frame_id = robot_pose_map.header.frame_id;
+  follow_goal_pt.header.stamp = robot_pose_map.header.stamp;
+
   // calculate look-ahead distance
+  double dst = std::hypot(goal_x_ - robot_pose_map.pose.position.x, goal_y_ - robot_pose_map.pose.position.y);
+  ROS_INFO("distance to goal: %f", dst);
   double vt = std::hypot(base_odom.twist.twist.linear.x, base_odom.twist.twist.linear.y);
   double wt = base_odom.twist.twist.angular.z;
-  double L = getLookAheadDistance(vt);
+  double L = getLookAheadDistanceFollow(vt, dst, 1.0);
 
   // get the particular point on the path at the lookahead distance
   geometry_msgs::PointStamped lookahead_pt;
@@ -208,7 +217,7 @@ bool MPCFollowController::computeVelocityCommands(geometry_msgs::Twist& cmd_vel)
   // current angle
   double theta = tf2::getYaw(robot_pose_map.pose.orientation);  // [-pi, pi]
   // calculate commands
-  if (shouldRotateToGoal(robot_pose_map, global_plan_.back()))
+  if (shouldRotateToGoal(robot_pose_map, global_plan_.back())) // position is reached, control only orientation
   {
     du_p_ = Eigen::Vector2d(0, 0);
     double e_theta = regularizeAngle(goal_theta_ - theta);
@@ -226,7 +235,7 @@ bool MPCFollowController::computeVelocityCommands(geometry_msgs::Twist& cmd_vel)
       cmd_vel.angular.z = angularRegularization(base_odom, e_theta / d_t_);
     }
   }
-  else
+  else // control both position and orientation through MPC
   {
     Eigen::Vector3d s(robot_pose_map.pose.position.x, robot_pose_map.pose.position.y, theta);  // current state
     Eigen::Vector3d s_d(lookahead_pt.point.x, lookahead_pt.point.y, theta_trj);                // desired state
@@ -245,6 +254,9 @@ bool MPCFollowController::computeVelocityCommands(geometry_msgs::Twist& cmd_vel)
   // publish robot pose
   current_pose_pub_.publish(robot_pose_map);
 
+  // publish follow goal pose
+  follow_goal_pt_pub_.publish(follow_goal_pt);
+
   return true;
 }
 
@@ -254,7 +266,7 @@ bool MPCFollowController::computeVelocityCommands(geometry_msgs::Twist& cmd_vel)
  * @param s_d   desired state
  * @param u_r   refered control
  * @param du_p  previous control error
- * @return u  control vector
+ * @return u  control vector = [v, w]
  */
 Eigen::Vector2d MPCFollowController::_mpcControl(Eigen::Vector3d s, Eigen::Vector3d s_d, Eigen::Vector2d u_r,
                                            Eigen::Vector2d du_p)
@@ -315,7 +327,7 @@ Eigen::Vector2d MPCFollowController::_mpcControl(Eigen::Vector3d s, Eigen::Vecto
     }
   }
 
-  // optimization
+  // optimization cost
   // min 1/2 * x.T * P * x + q.T * x
   // s.t. l <= Ax <= u
   Eigen::VectorXd Yr = Eigen::VectorXd::Zero(dim_x * p_);                              // (3p x 1)
